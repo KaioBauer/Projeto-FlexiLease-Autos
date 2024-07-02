@@ -33,12 +33,16 @@
     "typescript": "^5.5.2"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/node-fetch": "^2.6.11",
     "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.4",
+    "node-fetch": "^3.3.2",
     "yup": "^1.4.0"
   }
 }

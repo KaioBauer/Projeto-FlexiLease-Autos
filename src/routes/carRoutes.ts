@@ -7,18 +7,18 @@ import {
   deleteCar,
   modifyCarAccessory,
 } from '../controllers/carController';
-import { authenticate } from '../middlewares/auth';
+import { authenticateToken } from '../middlewares/authenticateToken';
 
 const router = Router();
 
-router.post('/car', authenticate, createCar);
-router.get('/car', authenticate, listCars);
-router.delete('/car/:id', authenticate, deleteCar);
-router.put('/car/:id', authenticate, updateCar);
-router.get('/car/:id', authenticate, getCar);
+router.post('/car', authenticateToken, createCar);
+router.get('/car', authenticateToken, listCars);
+router.delete('/car/:id', authenticateToken, deleteCar);
+router.put('/car/:id', authenticateToken, updateCar);
+router.get('/car/:id', authenticateToken, getCar);
 router.patch(
   '/car/:carId/accessories/:accessoryId',
-  authenticate,
+  authenticateToken,
   modifyCarAccessory,
 );
 
