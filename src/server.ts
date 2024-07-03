@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import carRoutes from './routes/carRoutes';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
+import reservationRoutes from './routes/reservationRoutes';
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.use(express.json());
 app.use('/api/v1', userRoutes);
 app.use(express.json());
 app.use('/api/v1', authRoutes);
+app.use(express.json());
+app.use('/api/v1', reservationRoutes);
 
 const MONGODB_URI =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/flexilease';
