@@ -12,7 +12,7 @@ export const authenticateUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password.' });
+      return res.status(400).json({ message: 'Invalid email' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);

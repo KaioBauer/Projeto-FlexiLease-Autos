@@ -2,7 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import carRoutes from './routes/carRoutes';
-import { generateToken } from './utils/generateToken';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 
