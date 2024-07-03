@@ -4,6 +4,6 @@ import { authenticateUser } from '../controllers/authController';
 
 const router = express.Router();
 
-router.post('/auth', authenticateUser);
+router.post('/authenticate', authenticateUser);
 
 export default router;
