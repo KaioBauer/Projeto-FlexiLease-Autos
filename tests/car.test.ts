@@ -1,7 +1,18 @@
-// tests/carRoutes.test.ts
 import request from 'supertest';
-import app from '../src/server'; // Ajuste conforme seu caminho
-import { generateToken } from '../src/utils/generateToken'; // Suponha que essa função já exista
+import app from '../src/server';
+import { generateToken } from '../src/utils/generateToken';
+
+let server: any;
+beforeAll((done) => {
+  server = app.listen(0, () => {
+    console.log(`Test server running on port ${server.address().port}`);
+    done();
+  });
+});
+
+afterAll(() => {
+  server.close();
+});
 
 interface Accessory {
   _id: string;
@@ -70,7 +81,7 @@ describe('Car API Routes', () => {
 
     console.log(response.body);
     expect(response.status).toBe(200);
-    expect(response.body.car.color).toBe('Red'); // Verifique a estrutura da resposta da API
+    expect(response.body.car.color).toBe('Red');
   });
 
   it('should handle accessory modifications', async () => {
