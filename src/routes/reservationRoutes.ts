@@ -6,13 +6,14 @@ import {
   updateReservation,
   deleteReservation,
 } from '../controllers/reservationController';
+import { authenticateToken } from '../middlewares/authenticateToken';
 
 const router = express.Router();
 
-router.post('/reserve', createReservation);
-router.put('/reserve/:reservationId', updateReservation);
-router.get('/reserve', getAllReservations);
-router.get('/reserve/:id', getReservationById);
-router.delete('/reserve/:id', deleteReservation);
+router.post('/reserve', authenticateToken, createReservation);
+router.put('/reserve/:reservationId', authenticateToken, updateReservation);
+router.get('/reserve', authenticateToken, getAllReservations);
+router.get('/reserve/:id', authenticateToken, getReservationById);
+router.delete('/reserve/:id', authenticateToken, deleteReservation);
 
 export default router;
