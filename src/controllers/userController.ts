@@ -120,7 +120,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     if (!deletedUser) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.status(204).json(); // No content to return, user successfully deleted
+    res.status(204).json();
   } catch (error: any) {
     res
       .status(500)

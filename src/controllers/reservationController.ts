@@ -76,7 +76,6 @@ export const createReservation = async (
       final_value: finalValue.toFixed(2),
     });
   } catch (error: any) {
-    console.error('Reservation creation error:', error);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -100,7 +99,6 @@ export const updateReservation = async (
       return res.status(400).json({ error: 'Invalid date format provided.' });
     }
 
-    // Fetch the car details
     const car = await Car.findById(reservation.car);
     if (!car) {
       return res.status(404).json({ message: 'Car not found.' });
@@ -121,7 +119,6 @@ export const updateReservation = async (
         .json({ message: 'Car already booked for the given dates.' });
     }
 
-    // Calculate final value
     const days =
       (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24) + 1;
     const final_value = days * car.value_per_day;
@@ -158,14 +155,11 @@ export const getAllReservations = async (
       continue;
     }
 
-    console.log(`Processing filter for key: ${key}, value: ${value}`);
-
     if (key === 'start_date' || key === 'end_date') {
       if (typeof value === 'string') {
         const [day, month, year] = value.split('/');
         const formattedDate = new Date(`${year}-${month}-${day}T00:00:00.000Z`);
         queryFilters[key] = formattedDate;
-        console.log(`Formatted date for key ${key}: ${formattedDate}`);
       }
     } else if (key === 'id_user' || key === 'id_car' || key === 'id_reserve') {
       if (typeof value === 'string') {
@@ -185,15 +179,11 @@ export const getAllReservations = async (
   }
 
   try {
-    console.log('Query Filters:', queryFilters);
-
     const reservations = await Reservation.find(queryFilters)
       .populate('user', 'name')
       .populate('car', 'model')
       .skip((parseInt(page as string, 10) - 1) * parseInt(limit as string, 10))
       .limit(parseInt(limit as string, 10));
-
-    console.log('Found Reservations:', reservations);
 
     const totalReservations = await Reservation.countDocuments(queryFilters);
 
@@ -222,10 +212,7 @@ export const getReservationById = async (
 ): Promise<Response> => {
   const { id } = req.params;
 
-  console.log(`Received reservation ID: ${id}`); // Log do ID recebido
-
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    console.log('Invalid reservation ID format'); // Log do formato inválido
     return res.status(400).json({ error: 'Invalid reservation ID.' });
   }
 
@@ -235,11 +222,9 @@ export const getReservationById = async (
       .populate('car', 'model');
 
     if (!reservation) {
-      console.log('Reservation not found'); // Log de reserva não encontrada
       return res.status(404).json({ error: 'Reservation not found.' });
     }
 
-    console.log('Reservation found', reservation); // Log da reserva encontrada
     return res.status(200).json({
       id_reserve: reservation._id.toString(),
       id_user: reservation.user._id.toString(),
@@ -249,7 +234,6 @@ export const getReservationById = async (
       final_value: reservation.final_value.toFixed(2),
     });
   } catch (error: any) {
-    console.log('Error fetching reservation:', error.message); // Log de erro
     return res.status(500).json({ error: error.message });
   }
 };
@@ -260,10 +244,7 @@ export const deleteReservation = async (
 ): Promise<Response> => {
   const { id } = req.params;
 
-  console.log(`Received reservation ID: ${id}`);
-
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    console.log('Invalid reservation ID format');
     return res.status(400).json({ error: 'Invalid reservation ID format.' });
   }
 
@@ -271,14 +252,11 @@ export const deleteReservation = async (
     const reservation = await Reservation.findByIdAndDelete(id);
 
     if (!reservation) {
-      console.log('Reservation not found');
       return res.status(404).json({ error: 'Reservation not found.' });
     }
 
-    console.log('Reservation deleted successfully');
     return res.status(204).send();
   } catch (error: any) {
-    console.log('Error deleting reservation:', error.message);
     return res.status(500).json({ error: error.message });
   }
 };
