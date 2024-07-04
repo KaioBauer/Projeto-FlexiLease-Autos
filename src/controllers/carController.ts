@@ -74,7 +74,6 @@ export async function listCars(req: Request, res: Response) {
   }
 }
 
-// Deletar um carro
 export async function deleteCar(req: Request, res: Response) {
   const { id } = req.params;
 
@@ -91,7 +90,6 @@ export async function deleteCar(req: Request, res: Response) {
   }
 }
 
-// Atualizar um carro
 export async function updateCar(req: Request, res: Response) {
   const { id } = req.params;
 
@@ -119,7 +117,6 @@ export async function updateCar(req: Request, res: Response) {
   }
 }
 
-// Obter detalhes de um carro
 export async function getCar(req: Request, res: Response) {
   const { id } = req.params;
 
@@ -140,7 +137,6 @@ export async function getCar(req: Request, res: Response) {
   }
 }
 
-// Modificar acessório de um carro
 export async function modifyCarAccessory(req: Request, res: Response) {
   const { carId, accessoryId } = req.params;
   const { description } = req.body;

@@ -1,4 +1,3 @@
-// models/Car.ts
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 interface IAccessory {

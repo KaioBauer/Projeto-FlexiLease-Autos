@@ -1,4 +1,3 @@
-// src/middleware/authenticateToken.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -18,7 +17,7 @@ export const authenticateToken = (
   next: NextFunction,
 ) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1]; // Assume format "Bearer TOKEN"
+  const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
     return res
@@ -30,7 +29,7 @@ export const authenticateToken = (
     if (err) {
       return res.status(403).json({ message: 'Invalid token.' });
     }
-    req.user = decoded as JwtPayload; // Attach user payload to request
-    next(); // Correctly move to the next middleware/function
+    req.user = decoded as JwtPayload;
+    next();
   });
 };
