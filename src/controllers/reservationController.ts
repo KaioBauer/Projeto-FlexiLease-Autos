@@ -159,7 +159,7 @@ export const getAllReservations = async (
       if (typeof value === 'string') {
         const [day, month, year] = value.split('/');
         const formattedDate = new Date(`${year}-${month}-${day}T00:00:00.000Z`);
-        queryFilters[key] = formattedDate;
+        queryFilters[key] = { $eq: formattedDate };
       }
     } else if (key === 'id_user' || key === 'id_car' || key === 'id_reserve') {
       if (typeof value === 'string') {

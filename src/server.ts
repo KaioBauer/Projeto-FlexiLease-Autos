@@ -5,11 +5,20 @@ import carRoutes from './routes/carRoutes';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 import reservationRoutes from './routes/reservationRoutes';
+import swaggerUi from 'swagger-ui-express';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const swaggerFile = path.resolve(__dirname, './swagger.json');
+const swaggerData = fs.readFileSync(swaggerFile, 'utf8');
+const swaggerDocument = JSON.parse(swaggerData);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(express.json());
 app.use('/api/v1', carRoutes);
