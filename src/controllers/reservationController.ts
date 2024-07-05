@@ -150,10 +150,7 @@ export const getAllReservations = async (
   const queryFilters: SearchFilters = {};
   for (const key of Object.keys(filters)) {
     const value = filters[key];
-
-    if (!value) {
-      continue;
-    }
+    if (!value) continue;
 
     if (key === 'start_date' || key === 'end_date') {
       if (typeof value === 'string') {
@@ -172,9 +169,7 @@ export const getAllReservations = async (
         queryFilters[key] = parseFloat(value);
       }
     } else {
-      if (typeof value === 'string') {
-        queryFilters[key] = { $regex: new RegExp(value, 'i') };
-      }
+      queryFilters[key] = { $regex: new RegExp(String(value), 'i') };
     }
   }
 
@@ -187,15 +182,21 @@ export const getAllReservations = async (
 
     const totalReservations = await Reservation.countDocuments(queryFilters);
 
+    const response = reservations.map((reservation) => ({
+      id_reserve: reservation._id.toString(),
+      id_user: reservation.user
+        ? reservation.user._id.toString()
+        : 'User not found',
+      start_date: reservation.start_date.toLocaleDateString('pt-BR'),
+      end_date: reservation.end_date.toLocaleDateString('pt-BR'),
+      id_car: reservation.car
+        ? reservation.car._id.toString()
+        : 'Car not found',
+      final_value: reservation.final_value.toFixed(2),
+    }));
+
     return res.status(200).json({
-      reserves: reservations.map((reservation) => ({
-        id_reserve: reservation._id.toString(),
-        id_user: reservation.user._id.toString(),
-        start_date: reservation.start_date.toLocaleDateString('pt-BR'),
-        end_date: reservation.end_date.toLocaleDateString('pt-BR'),
-        id_car: reservation.car._id.toString(),
-        final_value: reservation.final_value.toFixed(2),
-      })),
+      reserves: response,
       total: totalReservations,
       limit: parseInt(limit as string, 10),
       page: parseInt(page as string, 10),
