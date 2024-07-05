@@ -1,0 +1,462 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Desafio 3 Compasso UOL - API de aluguel de carros",
+    "version": "1.0.0",
+    "description": "API de aluguel de carros desenvolvida para o desafio 3 da Compass UOL. A API permite o cadastro de usuários, carros e reservas, além de autenticação de usuários. A API foi desenvolvida utilizando Node.js, Express, MongoDB e JWT. A documentação foi gerada utilizando Swagger.",
+    "contact": {
+      "name": "Kaio Guilherme Bauer",
+      "email": "kaio.bauer.pb@compasso.com.br"
+    }
+  },
+
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/authenticate": {
+      "post": {
+        "summary": "Authenticate user",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Authenticated successfully", "content": { "application/json": { "schema": { "type": "object", "properties": { "token": { "type": "string" } } } } } },
+          "400": { "description": "Invalid email or password" }
+        }
+      }
+    },
+    "/api/v1/user": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "cpf": { "type": "string" },
+                  "birth": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "cep": { "type": "string" },
+                  "qualified": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User registered successfully" },
+          "400": { "description": "Invalid input" }
+        }
+      },
+      "get": {
+        "summary": "Get all users",
+        "tags": ["Users"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": { "description": "List of all users" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/v1/user/{id}": {
+      "put": {
+        "summary": "Update a user",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The user ID"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "cpf": { "type": "string" },
+                  "birth": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "cep": { "type": "string" },
+                  "qualified": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User updated successfully" },
+          "400": { "description": "Invalid input" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The user ID"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": { "description": "User deleted successfully" },
+          "400": { "description": "Invalid ID" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "get": {
+        "summary": "Get a user by ID",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The user ID"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": { "description": "User details" },
+          "404": { "description": "User not found" }
+        }
+      }
+    },
+    "/api/v1/car": {
+      "post": {
+        "summary": "Create a new car",
+        "tags": ["Cars"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "modelName": { "type": "string" },
+                  "color": { "type": "string" },
+                  "year": { "type": "integer" },
+                  "value_per_day": { "type": "number" },
+                  "accessories": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "description": { "type": "string" }
+                      }
+                    }
+                  },
+                  "number_of_passengers": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Car created successfully" },
+          "400": { "description": "Invalid input" }
+        }
+      },
+      "get": {
+        "summary": "Get all cars",
+        "tags": ["Cars"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": { "description": "List of all cars" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/v1/car/{id}": {
+      "get": {
+        "summary": "Get a car by ID",
+        "tags": ["Cars"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The car ID"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": { "description": "Car details" },
+          "404": { "description": "Car not found" }
+        }
+      },
+      "put": {
+        "summary": "Update a car",
+        "tags": ["Cars"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The car ID"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "modelName": { "type": "string" },
+                  "color": { "type": "string" },
+                  "year": { "type": "integer" },
+                  "value_per_day": { "type": "number" },
+                  "accessories": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "description": { "type": "string" }
+                      }
+                    }
+                  },
+                  "number_of_passengers": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Car updated successfully" },
+          "400": { "description": "Invalid input" },
+          "404": { "description": "Car not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a car",
+        "tags": ["Cars"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The car ID"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": { "description": "Car deleted successfully" },
+          "400": { "description": "Invalid ID" },
+          "404": { "description": "Car not found" }
+        }
+      }
+    },
+    "/api/v1/reserve": {
+      "post": {
+        "summary": "Create a new reservation",
+        "tags": ["Reservations"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id_user": { "type": "string" },
+                  "id_car": { "type": "string" },
+                  "start_date": { "type": "string" },
+                  "end_date": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Reservation created successfully" },
+          "400": { "description": "Invalid input" }
+        }
+      },
+      "get": {
+        "summary": "Get all reservations",
+        "tags": ["Reservations"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": { "description": "List of all reservations" },
+          "400": { "description": "Invalid query parameters" }
+        }
+      }
+    },
+    "/api/v1/reserve/{id}": {
+      "get": {
+        "summary": "Get a reservation by ID",
+        "tags": ["Reservations"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The reservation ID"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Reservation details" },
+          "404": { "description": "Reservation not found" }
+        }
+      },
+      "put": {
+        "summary": "Update a reservation",
+        "tags": ["Reservations"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The reservation ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "start_date": { "type": "string" },
+                  "end_date": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Reservation updated successfully" },
+          "400": { "description": "Invalid input" },
+          "404": { "description": "Reservation not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a reservation",
+        "tags": ["Reservations"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "The reservation ID"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Reservation deleted successfully" },
+          "400": { "description": "Invalid ID" },
+          "404": { "description": "Reservation not found" }
+        }
+      }
+    }
+  }
+}
