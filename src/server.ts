@@ -30,7 +30,8 @@ app.use(express.json());
 app.use('/api/v1', reservationRoutes);
 
 const MONGODB_URI =
-  process.env.MONGODB_URI || 'mongodb://localhost:27017/flexilease';
+  process.env.MONGODB_URI ||
+  'mongodb+srv://kaiobauer:Vania.272@apicompass.zfsqguw.mongodb.net/?retryWrites=true&w=majority&appName=APICompass';
 
 mongoose
   .connect(MONGODB_URI)
